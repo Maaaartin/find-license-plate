@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find license plate</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
+  </head>
+  <body>
+    <template id="country-option">
+      <label v-once @vue:mounted="mounted">
+        <input
+          type="checkbox"
+          :value="value"
+          v-model="store.selected"
+          @change="openTabIfSelected"
+        />
+        {{label}}
+        <a :href="homepage" target="_blank">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            width="20"
+            height="20"
+            viewBox="0 0 30 30"
+          >
+            <path
+              d="M 25.980469 2.9902344 A 1.0001 1.0001 0 0 0 25.869141 3 L 20 3 A 1.0001 1.0001 0 1 0 20 5 L 23.585938 5 L 13.292969 15.292969 A 1.0001 1.0001 0 1 0 14.707031 16.707031 L 25 6.4140625 L 25 10 A 1.0001 1.0001 0 1 0 27 10 L 27 4.1269531 A 1.0001 1.0001 0 0 0 25.980469 2.9902344 z M 6 7 C 4.9069372 7 4 7.9069372 4 9 L 4 24 C 4 25.093063 4.9069372 26 6 26 L 21 26 C 22.093063 26 23 25.093063 23 24 L 23 14 L 23 11.421875 L 21 13.421875 L 21 16 L 21 24 L 6 24 L 6 9 L 14 9 L 16 9 L 16.578125 9 L 18.578125 7 L 16 7 L 14 7 L 6 7 z"
+            ></path>
+          </svg>
+        </a>
+      </label>
+    </template>
+
+    <template id="dynamic-country-list">
+      <div
+        v-scope="store.selected"
+        v-once
+        @input="store.onSelectedChange"
+        class="grid"
+        v-for="option in options"
+        :key="option.value"
+      >
+        <span v-scope="CountryOption({ option })"></span>
+      </div>
+    </template>
+
+    <template id="static-country-list">
+      <div class="grid" v-once v-for="option in options" :key="option.value">
+        <a :href="option.homepage" target="_blank">{{option.label}}</a>
+      </div>
+    </template>
+
+    <div class="container" v-scope="store">
+      <header><h1>Find car by license plate</h1></header>
+      <p>This app contains useful links to national vehicle registers.</p>
+      <label>
+        Open as
+        <select
+          name="Open as"
+          aria-label="Select open method"
+          @change="store.onOpenMethodChange"
+        >
+          <option value="tab">Tab</option>
+          <option value="window">Window</option>
+        </select>
+      </label>
+      <h2>Countries with dynamic search</h2>
+      <p>If selected, the url in the tab/window automatically updates.</p>
+      <span v-scope="DynamicCountryList()" @vue:mounted="mounted"></span>
+      <input
+        v-once
+        autofocus
+        type="text"
+        :value="store.licensePlate"
+        @input="store.onSearchQueryChange"
+        placeholder="Enter search query"
+      />
+      <h2>Countries with static link</h2>
+      <span v-scope="StaticCountryList()"></span>
+      <footer>Martin Svoboda</footer>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
