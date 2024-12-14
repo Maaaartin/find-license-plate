@@ -4,3 +4,5 @@ Allows searching for license plates across multiple national registers. Some web
 
 Written using https://github.com/vuejs/petite-vue.
 Maybe I add more countries in the future.
+
+https://maaaartin.github.io/find-license-plate/
